@@ -1,11 +1,25 @@
 <html>
 <script src='https://d3js.org/d3.v5.min.js'></script>
+<style>
+        html, body, #vis {
+            height: 90%;
+            margin: 10;
+            background-color:#90EE90;
+
+        }
+        text {
+          font-size: 1.5em
+        }
+</style>
 <body>
-  <h3>Olympic Gold Medal Table (Top Ten GDP Country 2017)</h3>
+  <h2>Top 10 Country (GDP in 2017)! Let's see how many gold medals they have won in Olympic Games.</h2>
   <form>
           <label for="year">Year: </label>
-          <input type="range" min=2008 max=2016 step=4 id="year" value=2016 oninput="selected_year.value = year.value">
-          <output name="selected_year" id="selected_year">2016</output>
+          <input type="range" min=2008 max=2016 step=4 id="year" value=2008 oninput="selected_year.value = year.value">
+          <output name="selected_year" id="selected_year">2008</output>
+          <h4 id='t_title'>Gold Medals Count in Beijing 2008</h4>
+          <div id='t_desp'>
+Beijing alternatively romanized as Peking, is the capital of the People's Republic of China.          </div>
   </form>
 <div id="vis">
 </div>
@@ -15,7 +29,7 @@ var width = document.getElementById('vis')
     .clientWidth;
 var height = document.getElementById('vis')
     .clientHeight;
-
+console.log(height);
 var margin = {
     top: 10,
     bottom: 70,
@@ -54,6 +68,21 @@ svg.append('g')
 
 svg.append('g')
     .attr('class', 'y axis');
+
+function changeAnno(year) {
+  var title = document.getElementById('t_title');
+  var desp = document.getElementById('t_desp');
+  if (year == 2016) {
+    title.innerHTML = 'Gold Medals Count in Rio 2016';
+    desp.innerHTML = 'Rio de Janeiro or simply Rio, is the second-most populous city in Brazil and the sixth-most populous in the Americas.';
+  } else if (year == 2012) {
+    title.innerHTML = 'Gold Medals Count in London 2012';
+    desp.innerHTML = 'London is the capital and largest city of England and the United Kingdom.';
+  } else if (year == 2008) {
+    title.innerHTML = 'Gold Medals Count in Beijing 2008';
+    desp.innerHTML = 'Beijing alternatively romanized as Peking, is the capital of the People\'s Republic of China.';
+  }
+}
 
 function draw(year) {
 
@@ -111,25 +140,155 @@ function draw(year) {
         .transition(t)
         .call(y_axis);
 
+  svg.selectAll(".label").remove();
+  svg.selectAll(".text")
+      .data(csv_data)
+      .enter()
+      .append("text")
+      .attr("class","label")
+      .attr("x", (function(d) { return x_scale(d.name) + 40; }  ))
+      .attr("y", function(d) { return y_scale(+d.value) - 20; })
+      .attr("dy", ".75em")
+      .text(function(d) { return d.value; }).transition().duration(1500);
+
 }
 
-Promise.all([
-    d3.csv("london2012.csv"),
-    d3.csv("rio2016.csv"),
-    d3.csv("beijing2008.csv"),
-]).then(function(d2012, d2016, d2008) {
-  data['2008'] = d2008;
-  data['2012'] = d2012;
-  data['2016'] = d2016;
-  draw('2016');
-}).catch(function(err) {
-    // handle error here
-});
+
+data['2008'] = [
+  {
+    "name": "United States",
+    "value": 36
+  },
+  {
+    "name": "China",
+    "value": 48
+  },
+  {
+    "name": "Japan",
+    "value": 9
+  },
+  {
+    "name": "Germany",
+    "value": 16
+  },
+  {
+    "name": "India",
+    "value": 1
+  },
+  {
+    "name": "United Kingdom",
+    "value": 19
+  },
+  {
+    "name": "France",
+    "value": 7
+  },
+  {
+    "name": "Brazil",
+    "value": 3
+  },
+  {
+    "name": "Italy",
+    "value": 8
+  },
+  {
+    "name": "Canada",
+    "value": 3
+  }
+];
+data['2012'] = [
+  {
+    "name": "United States",
+    "value": 46
+  },
+  {
+    "name": "China",
+    "value": 38
+  },
+  {
+    "name": "Japan",
+    "value": 7
+  },
+  {
+    "name": "Germany",
+    "value": 11
+  },
+  {
+    "name": "India",
+    "value": 0
+  },
+  {
+    "name": "United Kingdom",
+    "value": 29
+  },
+  {
+    "name": "France",
+    "value": 11
+  },
+  {
+    "name": "Brazil",
+    "value": 3
+  },
+  {
+    "name": "Italy",
+    "value": 8
+  },
+  {
+    "name": "Canada",
+    "value": 2
+  }
+];
+data['2016'] = [
+  {
+    "name": "United States",
+    "value": 46
+  },
+  {
+    "name": "China",
+    "value": 26
+  },
+  {
+    "name": "Japan",
+    "value": 12
+  },
+  {
+    "name": "Germany",
+    "value": 17
+  },
+  {
+    "name": "India",
+    "value": 0
+  },
+  {
+    "name": "United Kingdom",
+    "value": 27
+  },
+  {
+    "name": "France",
+    "value": 10
+  },
+  {
+    "name": "Brazil",
+    "value": 8
+  },
+  {
+    "name": "Italy",
+    "value": 8
+  },
+  {
+    "name": "Canada",
+    "value": 4
+  }
+];
+draw('2008');
+
 
 
 
 var slider = d3.select('#year');
 slider.on('change', function() {
+
+    changeAnno(this.value);
     draw(this.value);
 });
 
