@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <style>
@@ -10,6 +11,18 @@
         text {
           font-size: 1.5em
         }
+
+        a:link {
+          color: blue;
+        }
+
+        a:visited {
+          color: purple;
+        }
+
+        a:active {
+          color: red;
+        }
 </style>
 <body>
   <h2>Top 10 Country (GDP in 2017)! Let's see how many gold medals they have won in Olympic Games.</h2>
@@ -18,8 +31,10 @@
           <input type="range" min=2008 max=2016 step=4 id="year" value=2008 oninput="selected_year.value = year.value">
           <output name="selected_year" id="selected_year">2008</output>
           <h4 id='t_title'>Gold Medals Count in Beijing 2008</h4>
-          <div id='t_desp'>
-Beijing alternatively romanized as Peking, is the capital of the People's Republic of China.          </div>
+          <div id='t_desp'><a href='https://olympics.com/en/olympic-games/beijing-2008' target='_blank'>Beijing alternatively romanized as Peking, is the capital of the People's Republic of China.</a>
+          </div>
+          <p>&uarr; Click to learn more</p>
+          <br>
   </form>
 <div id="vis">
 </div>
@@ -72,15 +87,17 @@ svg.append('g')
 function changeAnno(year) {
   var title = document.getElementById('t_title');
   var desp = document.getElementById('t_desp');
+  var hyper = document.getElementById('hyper');
   if (year == 2016) {
     title.innerHTML = 'Gold Medals Count in Rio 2016';
-    desp.innerHTML = 'Rio de Janeiro or simply Rio, is the second-most populous city in Brazil and the sixth-most populous in the Americas.';
+    desp.innerHTML = "<a href='https://olympics.com/en/olympic-games/rio-2016' target='_blank'>Rio de Janeiro or simply Rio, is the second-most populous city in Brazil and the sixth-most populous in the Americas.</a>";
   } else if (year == 2012) {
     title.innerHTML = 'Gold Medals Count in London 2012';
-    desp.innerHTML = 'London is the capital and largest city of England and the United Kingdom.';
+    desp.innerHTML = "<a href='https://olympics.com/en/olympic-games/london-2012' target='_blank'>London is the capital and largest city of England and the United Kingdom.</a>";
   } else if (year == 2008) {
     title.innerHTML = 'Gold Medals Count in Beijing 2008';
-    desp.innerHTML = 'Beijing alternatively romanized as Peking, is the capital of the People\'s Republic of China.';
+    desp.innerHTML = "<a href='https://olympics.com/en/olympic-games/beijing-2008' target='_blank'>Beijing alternatively romanized as Peking, is the capital of the People's Republic of China.</a>";
+
   }
 }
 
